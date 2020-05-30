@@ -27,8 +27,11 @@ game_state.main.prototype = {
         this.bird.body.gravity.y = 1000; 
 
         // Call the 'jump' function when the spacekey is hit
-        var space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        space_key.onDown.add(this.jump, this); 
+        // space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        //space_key.onDown.add(this.jump, this); 
+		
+		//var press_key = this.game.input.pointer.LEFT_BUTTON;
+        this.game.input.onDown.add(this.jump, this); 
 
         // Create a group of 20 pipes
         this.pipes = game.add.group();
@@ -92,7 +95,10 @@ game_state.main.prototype = {
                 this.add_one_pipe(400, i*60+10);   
     
         this.score += 1;
-        this.label_score.content = this.score;  
+		if (this.score >= 6)
+			this.label_score.content = "小羊同学儿童节快乐鸭"
+		else
+			this.label_score.content = this.score;  
     },
 };
 
