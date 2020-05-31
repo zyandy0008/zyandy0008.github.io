@@ -2,6 +2,7 @@
 var game = new Phaser.Game(720, 1280, Phaser.AUTO, 'game_div');
 var game_state = {};
 
+
 // Creates a new 'main' state that will contain the game
 game_state.main = function() { };  
 game_state.main.prototype = {
@@ -10,8 +11,32 @@ game_state.main.prototype = {
     preload: function() { 
         // Change the background color of the game
         //this.game.stage.backgroundColor = '#71c5cf';
-
-        // Load the sprites
+			this.game.load.image('bgpic', 'assets/bgpic.png');
+            this.bgpic = this.add.sprite(0, 0, "bgpic");
+            var width = 700;
+            var height = 1280;
+			var style = { font: "50px Arial", fill: "#ffffff" };
+            this.load.onLoadStart.add(function (value) {
+				this.loadingText = this.game.add.text(width / 2 - 100, height / 2 - 100, "Loading...", style);
+				this.percentText = this.game.add.text(width / 2 - 100, height / 2 - 50, "0%", style);
+                //this.progressBar.clear();
+                //this.progressBar.beginFill(0xffffff);
+				//this.progressBar.fillAlpha = 0.8;
+                //this.progressBar.fillRect(250, 280, 300 * value, 30);
+            });
+            
+            this.load.onFileComplete.add(function (progress, cacheKey, success, totalLoaded, totalFiles) {
+                this.percentText.content = (progress + '%');
+            });
+ 
+            this.load.onLoadComplete.add(function () {
+                //this.progressBar.destroy();
+                //this.progressBox.destroy();
+                this.loadingText.destroy();
+                this.percentText.destroy();
+            });
+            
+            this.load.image('logo', 'assets/sheep.png');
 		this.foods = ['rice', 'cake', 'chocolate', 'strawburry', 'cookie', 'pie', 'turkey', 'octopus'];
         this.game.load.spritesheet('sheep', 'assets/puzzle.png', 360, 203, 4);
 		for(var i in this.foods)
@@ -20,7 +45,6 @@ game_state.main.prototype = {
 		}
 		this.game.load.audio('miemie', 'assets/miemie.wav');
 		this.game.load.audio('bgm', 'assets/bg.mp3');
-		this.game.load.image('bgpic', 'assets/bgpic.png');
     },
 
     // Fuction called after 'preload' to setup the game 
