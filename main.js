@@ -37,7 +37,7 @@ game_state.main.prototype = {
             });
             
             this.load.image('logo', 'assets/sheep.png');
-		this.foods = ['rice', 'cake', 'chocolate', 'strawburry', 'cookie', 'pie', 'turkey', 'octopus'];
+		this.foods = ['rice', 'cake', 'chocolate', 'strawburry', 'mushroom', 'cookie', 'pie', 'turkey', 'octopus'];
         this.game.load.spritesheet('sheep', 'assets/puzzle.png', 360, 203, 4);
 		for(var i in this.foods)
 		{
@@ -52,7 +52,7 @@ game_state.main.prototype = {
         // Display the sheep on the screen
 		this.bgpic = this.add.sprite(0, 0, "bgpic");
 		
-        this.sheep = this.game.add.sprite(100, 1280 - 100, 'sheep');
+        this.sheep = this.game.add.sprite(0, 1280 - 100, 'sheep');
 		//this.game.physics.arcade.enable(this.sheep);
 		this.sheep.body.bounce.y = 0.2;
 		this.sheep.body.gravity.y = 800;
@@ -65,7 +65,7 @@ game_state.main.prototype = {
         this.game.input.onDown.add(this.jump, this); 
 
         // Create food groups
-		this.food_mgr = [this.rice, this.cake, this.chocolate, this.strawburry, this.cookie, this.pie, this.turkey, this.octopus];
+		this.food_mgr = [this.rice, this.cake, this.chocolate, this.strawburry, this.mushroom, this.cookie, this.pie, this.turkey, this.octopus];
 		for(var i = 0; i < this.foods.length; ++i)
 		{
 			this.food_mgr[i] = game.add.group();
@@ -119,7 +119,7 @@ game_state.main.prototype = {
     },
 	
 	reset_sheep: function(){
-		this.sheep.reset(100, 1280 - 100);
+		this.sheep.reset(0, 1280 - 100);
 	},
 
     // Make the sheep jump 
@@ -171,7 +171,9 @@ game_state.main.prototype = {
 	get_score: function(key)
 	{
 		if(key == 'octopus')
-			return 20;
+			return 30;
+		if(key == 'mushroom')
+			return -15;
 		for(var i = 0; i < this.foods.length; ++i)
 		{
 			if(this.foods[i] == key)
@@ -188,15 +190,15 @@ game_state.main.prototype = {
 		object2.reset(-1000,-1000);
 		this.miemie.play();
 		this.sheep.animations.play('eat');
-		if(this.score == 601 || this.score >= 1200)
+		if(this.score == 601 || this.score >= 1000)
 			this.finish_game();
     },
 
     // Add a food on the screen
     add_one_food: function(i, x, y) {
         // Get the first dead pipe of our group
-		if(Math.random() > 0.9)
-			i = this.food_mgr.length-1;
+		if(i != this.food_mgr.length-1 && Math.random() > 0.9)
+			i += 1;
 		var food = this.food_mgr[i].getFirstDead();
         // Set the new position of the food
         food.reset(x, y);
