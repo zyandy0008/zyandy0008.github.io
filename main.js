@@ -171,7 +171,7 @@ game_state.main.prototype = {
 	get_score: function(key)
 	{
 		if(key == 'octopus')
-			return 20;
+			return 100;
 		for(var i = 0; i < this.foods.length; ++i)
 		{
 			if(this.foods[i] == key)
@@ -211,7 +211,7 @@ game_state.main.prototype = {
     add_row_of_food: function() {
         for (var i = 0; i < 17; i++)
 			if(Math.random() > (Math.random() * 0.2 + 0.7))
-                this.add_one_food(Math.floor(Math.random()*(this.food_mgr.lenght-1))+1, 576*(1-0.5*Math.random()), i*60-20);  
+                this.add_one_food(Math.floor(Math.random()*(this.food_mgr.length-1))+1, 576*(1-0.5*Math.random()), i*60-20);  
     },
 };
 
