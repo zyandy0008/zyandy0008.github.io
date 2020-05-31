@@ -1,5 +1,5 @@
-// Initialize Phaser, and creates a 400x490px game
-var game = new Phaser.Game(576, 1024, Phaser.AUTO, 'game_div');
+// Initialize Phaser, and creates a 576x1024px game
+var game = new Phaser.Game(720, 1280, Phaser.AUTO, 'game_div');
 var game_state = {};
 
 // Creates a new 'main' state that will contain the game
@@ -19,7 +19,7 @@ game_state.main.prototype = {
 			this.game.load.image(this.foods[i], 'assets/'+this.foods[i]+'.png');
 		}
 		this.game.load.audio('miemie', 'assets/miemie.wav');
-		//this.game.load.audio('bgm', 'assets/bg.mp3');
+		this.game.load.audio('bgm', 'assets/bg.mp3');
 		this.game.load.image('bgpic', 'assets/bgpic.png');
     },
 
@@ -28,16 +28,14 @@ game_state.main.prototype = {
         // Display the sheep on the screen
 		this.bgpic = this.add.sprite(0, 0, "bgpic");
 		
-        this.sheep = this.game.add.sprite(100, 1024 - 100, 'sheep');
+        this.sheep = this.game.add.sprite(100, 1280 - 100, 'sheep');
 		//this.game.physics.arcade.enable(this.sheep);
 		this.sheep.body.bounce.y = 0.2;
-		this.sheep.body.gravity.y = 300;
+		this.sheep.body.gravity.y = 800;
 		this.sheep.body.collideWorldBounds = true;
 		this.sheep.animations.add('jump', [0, 1, 2, 3], 10, false);
 		this.sheep.animations.add('eat', [0, 1], 10, false);
         
-        // Add gravity to the sheep to make it fall
-        this.sheep.body.gravity.y = 800; 
 
         // Call the 'jump' function when the spacekey is hit
         this.game.input.onDown.add(this.jump, this); 
@@ -55,7 +53,7 @@ game_state.main.prototype = {
 		this.bgm = this.game.add.sound('bgm', 1, true);
 
         // Timer that calls 'add_row_of_food' ever 1.5 seconds
-        this.timer = this.game.time.events.loop(1000, this.add_row_of_food, this);           
+        this.game.timer = this.game.time.events.loop(1000, this.add_row_of_food, this);           
 
         // Add a score label on the top left of the screen
         this.score = 0;
@@ -64,6 +62,7 @@ game_state.main.prototype = {
 		
 		this.game_finish = false;
 		this.bgm.play();
+		this.game_start = false;
     },
 	
 	check_overlap: function(child, i){
@@ -77,6 +76,11 @@ game_state.main.prototype = {
 
     // This function is called 60 times per second
     update: function() {
+		if(!this.game_start)
+		{
+			this.game_start = true;
+			this.start_time = this.game.time.time;
+		}
 		if(this.game_finish)
 			return;
         // If the sheep is out of the world (too high or too low), call the 'restart_game' function
@@ -91,7 +95,7 @@ game_state.main.prototype = {
     },
 	
 	reset_sheep: function(){
-		this.sheep.reset(100, 245);
+		this.sheep.reset(100, 1280 - 100);
 	},
 
     // Make the sheep jump 
@@ -106,22 +110,32 @@ game_state.main.prototype = {
 	// Restart the game
     restart_game: function() {
         // Remove the timer
-        this.game.time.events.remove(this.timer);
+        this.game.time.events.remove(this.game.timer);
 
         // Start the 'main' state, which restarts the game
         this.game.state.start('main');
     },
 	
 	finish_game: function() {
+		this.finish_time = this.game.time.time;
 		this.game_finish = true;
 		// Remove the timer
-        this.game.time.events.remove(this.timer);
+        this.game.time.events.remove(this.game.timer);
 		this.sheep.body.allowGravity  = false; 
 		this.sheep.body.velocity.y = 0; 
 		for(var i in this.food_mgr)
 			this.food_mgr[i].forEachAlive(this.stop_all, this, true);
 		var style = { font: "50px Arial", fill: "#ffffff" };
-        this.finish_text = this.game.add.text(160, 487, "恭喜通关！", style);  
+        this.finish_text = this.game.add.text(250, 600, "恭喜通关！", style);
+		var time_passed = this.finish_time - this.start_time;
+		var time_seconds = this.finish_time / 1000;
+		var time_minutes = Math.floor(time_seconds / 60);
+		time_seconds = Math.floor(time_seconds) % 60;
+		var style = { font: "20px Arial", fill: "#ffffff" };
+        this.game.time_text = this.game.add.text(300, 800, "用时"+time_minutes+"分"+time_seconds+"秒", style);
+		var style = { font: "15px Arial", fill: "#ffffff" };
+		//if(this.score == 601)
+			//this.game.extra_text = this.game.add.text(500, 1260, "六一快乐鸭~下楼拿零食啦~", style)
 	},
 	
 	show_score: function()
@@ -150,7 +164,7 @@ game_state.main.prototype = {
 		object2.reset(-1000,-1000);
 		this.miemie.play();
 		this.sheep.animations.play('eat');
-		if(this.score == 601 || this.score >= 1000)
+		if(this.score == 601 || this.score >= 1200)
 			this.finish_game();
     },
 
