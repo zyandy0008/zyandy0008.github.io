@@ -44,6 +44,7 @@ game_state.main.prototype = {
 			this.game.load.image(this.foods[i], 'assets/'+this.foods[i]+'.png');
 		}
 		this.game.load.audio('miemie', 'assets/miemie.wav');
+		this.game.load.audio('miemie2', 'assets/miemie2.wav');
 		this.game.load.audio('bgm', 'assets/bg.mp3');
     },
 
@@ -74,6 +75,7 @@ game_state.main.prototype = {
 		
 		//Create sounds
 		this.miemie = this.game.add.sound('miemie', 1, false);
+		this.miemie2 = this.game.add.sound('miemie2', 1, false);
 		this.bgm = this.game.add.sound('bgm', 1, true);
 
         // Timer that calls 'add_row_of_food' ever 1.5 seconds
@@ -186,9 +188,13 @@ game_state.main.prototype = {
     add_scores: function(object1, object2) {
 		var i = this.get_score(object2.key);
 		this.score += i;
+		this.score = this.score > 0? this.score : 0;
 		this.show_score();
 		object2.reset(-1000,-1000);
-		this.miemie.play();
+		if(i > 0)
+			this.miemie.play();
+		else
+			this.miemie2.play();
 		this.sheep.animations.play('eat');
 		if(this.score == 601 || this.score >= 1000)
 			this.finish_game();
