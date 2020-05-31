@@ -11,18 +11,12 @@ game_state.main.prototype = {
     preload: function() { 
         // Change the background color of the game
         //this.game.stage.backgroundColor = '#71c5cf';
-			this.game.load.image('bgpic', 'assets/bgpic.png');
-            this.bgpic = this.add.sprite(0, 0, "bgpic");
             var width = 700;
             var height = 1280;
 			var style = { font: "50px Arial", fill: "#ffffff" };
             this.load.onLoadStart.add(function (value) {
 				this.loadingText = this.game.add.text(width / 2 - 100, height / 2 - 100, "Loading...", style);
-				this.percentText = this.game.add.text(width / 2 - 100, height / 2 - 50, "0%", style);
-                //this.progressBar.clear();
-                //this.progressBar.beginFill(0xffffff);
-				//this.progressBar.fillAlpha = 0.8;
-                //this.progressBar.fillRect(250, 280, 300 * value, 30);
+				this.percentText = this.game.add.text(width / 2 - 80, height / 2 - 50, "0%", style);
             });
             
             this.load.onFileComplete.add(function (progress, cacheKey, success, totalLoaded, totalFiles) {
@@ -30,8 +24,6 @@ game_state.main.prototype = {
             });
  
             this.load.onLoadComplete.add(function () {
-                //this.progressBar.destroy();
-                //this.progressBox.destroy();
                 this.loadingText.destroy();
                 this.percentText.destroy();
             });
@@ -43,6 +35,7 @@ game_state.main.prototype = {
 		{
 			this.game.load.image(this.foods[i], 'assets/'+this.foods[i]+'.png');
 		}
+		this.game.load.image('bgpic', 'assets/bgpic.png');
 		this.game.load.audio('miemie', 'assets/miemie.wav');
 		this.game.load.audio('miemie2', 'assets/miemie2.wav');
 		this.game.load.audio('bgm', 'assets/bg.mp3');
@@ -74,7 +67,7 @@ game_state.main.prototype = {
 		}
 		
 		//Create sounds
-		this.miemie = this.game.add.sound('miemie', 1, false);
+		this.miemie = this.game.add.sound('miemie', 0.8, false);
 		this.miemie2 = this.game.add.sound('miemie2', 1, false);
 		this.bgm = this.game.add.sound('bgm', 1, true);
 
@@ -87,7 +80,6 @@ game_state.main.prototype = {
         this.label_score = this.game.add.text(20, 20, "0000", style);
 		
 		this.game_finish = false;
-		this.bgm.play();
 		this.game_start = false;
     },
 	
@@ -104,9 +96,12 @@ game_state.main.prototype = {
     update: function() {
 		if(!this.game_start)
 		{
+			//this.bgm.play();
 			this.game_start = true;
 			this.start_time = this.game.time.time;
 		}
+		if(!this.bgm.isPlaying)
+			this.bgm.play();
 		if(this.game_finish)
 			return;
         // If the sheep is out of the world (too high or too low), call the 'restart_game' function
@@ -186,16 +181,14 @@ game_state.main.prototype = {
 
     // add the scores
     add_scores: function(object1, object2) {
+		this.sheep.animations.play('eat');
 		var i = this.get_score(object2.key);
+		if(i > 0)
+			this.miemie.play();
 		this.score += i;
 		this.score = this.score > 0? this.score : 0;
 		this.show_score();
 		object2.reset(-1000,-1000);
-		if(i > 0)
-			this.miemie.play();
-		else
-			this.miemie2.play();
-		this.sheep.animations.play('eat');
 		if(this.score == 601 || this.score >= 1000)
 			this.finish_game();
     },
