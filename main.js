@@ -16,7 +16,7 @@ game_state.main.prototype = {
 			var style = { font: "50px Arial", fill: "#ffffff" };
             this.load.onLoadStart.add(function (value) {
 				this.loadingText = this.game.add.text(width / 2 - 100, height / 2 - 100, "Loading...", style);
-				this.percentText = this.game.add.text(width / 2 - 80, height / 2 - 50, "0%", style);
+				this.percentText = this.game.add.text(width / 2 - 50, height / 2 - 50, "0%", style);
             });
             
             this.load.onFileComplete.add(function (progress, cacheKey, success, totalLoaded, totalFiles) {
@@ -91,19 +91,37 @@ game_state.main.prototype = {
 		child.body.velocity.x = 0;
 		child.body.velocity.y = 0;
 	},
+	
+	show_extra: function(i){
+		var str = '羊同学六一快乐呀~前台有你想吃的零食^ ^'
+		var arr=str.split("")
+		if(i < arr.length)
+			this.game.extra_text.content = this.game.extra_text.content + arr[i];
+	},
 
     // This function is called 60 times per second
     update: function() {
 		if(!this.game_start)
 		{
 			//this.bgm.play();
+			var style = { font: "15px Arial", fill: "#edc8dc" };
+			this.game.extra_text = this.game.add.text(400, 1260, "", style);
 			this.game_start = true;
 			this.start_time = this.game.time.time;
+			this.ex_i = 0;
+			this.ex_j = 0;
 		}
 		if(!this.bgm.isPlaying)
 			this.bgm.play();
 		if(this.game_finish)
-			return;
+		{
+			if(this.score == 601)
+			{
+				if(this.ex_i++ % 30 == 0)
+					this.show_extra(this.ex_j++);
+			}
+			return;	
+		}
         // If the sheep is out of the world (too high or too low), call the 'restart_game' function
         if (this.sheep.inWorld == false)
             this.reset_sheep(); 
@@ -154,9 +172,6 @@ game_state.main.prototype = {
 		time_seconds = Math.floor(time_seconds) % 60;
 		var style = { font: "20px Arial", fill: "#ffffff" };
         this.game.time_text = this.game.add.text(300, 800, "用时"+time_minutes+"分"+time_seconds+"秒", style);
-		var style = { font: "15px Arial", fill: "#ffffff" };
-		//if(this.score == 601)
-			//this.game.extra_text = this.game.add.text(500, 1260, "六一快乐鸭~下楼拿零食啦~", style)
 	},
 	
 	show_score: function()
