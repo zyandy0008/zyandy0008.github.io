@@ -19,7 +19,7 @@ game_state.main.prototype = {
 			this.game.load.image(this.foods[i], 'assets/'+this.foods[i]+'.png');
 		}
 		this.game.load.audio('miemie', 'assets/miemie.wav');
-		this.game.load.audio('bgm', 'assets/bg.mp3');
+		//this.game.load.audio('bgm', 'assets/bg.mp3');
 		this.game.load.image('bgpic', 'assets/bgpic.png');
     },
 
