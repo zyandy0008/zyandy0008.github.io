@@ -9,7 +9,7 @@ var meeting = true;//定义一个阀值，遇到淘汰卡为假，没遇到为�
 starButton.onclick = function () {
     // 随机数决定抽卡的卡号和恶魔值，恶魔值=卡号=i
     i = Math.floor(Math.random() * 10);
-    cardShow.style.backgroundImage = 'url(./img/evil' + i + '.jpg)';
+    cardShow.style.backgroundImage = 'url(./img/spell' + 0 + '.jpg)';
     countAready++;//每点击一次就记录一次抽卡次数
     // 更据随机数i和是否遇见淘汰卡meeting来决定玩家数据
     if (i == 1) {
@@ -30,7 +30,7 @@ starButton.onclick = function () {
         for (var z = 0; z < Li.length; z++) {
             Li[z].style.visibility = 'hidden';
             starButton.style.visibility = 'hidden';
-            cardShow.style.backgroundImage = 'url(./img/gameover.jpg)';
+            cardShow.style.backgroundImage = 'url(./img/accio.jpg)';
             document.body.style.backgroundColor = 'red';
         }
     } else {
