@@ -1,0 +1,87 @@
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    width: 400px;
+    height: 576px;
+    border: 1px solid white;
+    border-radius: 6px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+/* 卡牌展示区域 */
+#cardShow {
+    display: block;
+    width: 320px;
+    height: 400px;
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url('./img/spell0.jpg');
+    animation: pictureChange ease 10s infinite;
+}
+
+@keyframes pictureChange{
+    0%{
+        transform: rotateY(0deg);
+    }
+    50%{
+        transform: rotateY(180deg);
+    }
+    100%{
+        transform: rotateY(0deg);
+    }
+}
+/* 定义开始按钮样式 */
+#startButton {
+    display: block;
+    float: left;
+    width: 96px;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: 37%;
+    border-radius: 9px;
+    background-color: rgb(165, 165, 165);
+    color: black;
+    font-size: 15px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 定义鼠标移动到开始按钮上时按钮的样式 */
+#startButton:hover {
+    background-color: rgb(59, 59, 59);
+    color: rgb(255, 255, 255);
+}
+
+/* 统计区域 */
+#countArea {
+    display: block;
+    float: left;
+    width: 230px;
+    height: 70px;
+    margin-left: 86px;
+    margin-top: 26px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 12px;
+    background-color: rgb(102, 102, 102);
+    color: aliceblue;
+}
+#countArea ul {
+    margin-left: -40px;
+    text-align: center;
+    list-style: none;
+}
+#countArea ul li{
+    margin-top: -6px;
+    line-height: 24px;
+    font-size: 16px;
+}
